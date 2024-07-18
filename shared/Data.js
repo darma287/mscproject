@@ -31,3 +31,7 @@ const SportList =[
     },
 
 ]
+
+export default {
+    GameList
+}
