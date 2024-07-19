@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import Data from '../../shared/Data'
 
 function SportList() {
+  const [game,setGames]=useState();
+  useEffect(()=>{
+    setGames(Data.SportList)
+  },[])
   return (
     <div>
-        A
+        Sport
     </div>
   )
 }

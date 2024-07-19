@@ -33,5 +33,5 @@ const SportList =[
 ]
 
 export default {
-    GameList
+    SportList
 }
