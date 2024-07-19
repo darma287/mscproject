@@ -2,32 +2,32 @@ const SportList =[
     {
         id:1,
         name: 'Football',
-        image:'',
+        image:'public/football.png',
     },
     {
         id:2,
         name: 'Basketball',
-        image:'',
+        image:'public/football.png',
     },
     {
         id:3,
         name: 'Volleyball',
-        image:'',
+        image:'public/football.png',
     },
     {
         id:4,
         name: 'Tennis',
-        image:'',
+        image:'public/football.png',
     },
     {
         id:5,
         name: 'Badminton',
-        image:'',
+        image:'public/football.png',
     },
     {
         id:6,
         name: 'Rugby',
-        image:'',
+        image:'public/football.png',
     },
 
 ]
