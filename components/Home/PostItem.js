@@ -1,4 +1,5 @@
 import React from 'react';
+import { HiOutlineCalendar, HiOutlineMapPin } from 'react-icons/hi2';
 
 function PostItem({ post }) {
   console.log("PostItem post:", post); // Log the post object to check its structure
@@ -6,12 +7,20 @@ function PostItem({ post }) {
   const hasTitle = post.Title && post.Title.trim() !== "";
   const hasDescription = post.Description && post.Description.trim() !== "";
 
+  const formatDate = (timestamp) => {
+    if (timestamp) {
+      const date = timestamp.toDate();
+      return date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    return 'No Date';
+  };
+
   return (
     <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       {post.image ? (
-        <img className="rounded-t-lg" src={post.image} alt="Post image" />
+        <img className="rounded-t-lg w-full h-[180px]" src={post.image} alt="Post image" />
       ) : (
-        <div className="rounded-t-lg bg-gray-200 h-48"></div> // Placeholder for missing image
+        <div className="rounded-t-lg bg-gray-200 h-48">Missing Image</div> 
       )}
       <div className="p-5">
         {hasTitle ? (
@@ -19,6 +28,14 @@ function PostItem({ post }) {
         ) : (
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">No Title</h5>
         )}
+        <div className="flex items-center text-green-500 gap-2 mb-2">
+          <HiOutlineCalendar className="text-[20px]" />
+          {formatDate(post.Date)}
+        </div>
+        <div className="flex items-center text-green-500 gap-2 mb-2">
+          <HiOutlineMapPin className="text-[20px]" />
+          {post.Location || 'No Location'}
+        </div>
         {hasDescription ? (
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{post.Description}</p>
         ) : (
