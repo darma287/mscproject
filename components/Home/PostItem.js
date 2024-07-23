@@ -1,8 +1,8 @@
 import React from 'react';
 import { HiOutlineCalendar, HiOutlineMapPin } from 'react-icons/hi2';
 
-function PostItem({ post }) {
-  console.log("PostItem post:", post); // Log the post object to check its structure
+function PostItem({ post,modal=false }) {
+  console.log("PostItem post:", post);
 
   const hasTitle = post.Title && post.Title.trim() !== "";
   const hasDescription = post.Description && post.Description.trim() !== "";
