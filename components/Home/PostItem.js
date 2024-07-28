@@ -8,11 +8,14 @@ function PostItem({ post,modal=false }) {
   const hasDescription = post.Description && post.Description.trim() !== "";
 
   const formatDate = (timestamp) => {
-    if (timestamp) {
-      const date = timestamp.toDate();
-      return date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (!timestamp) return 'No Date';
+    let date;
+    if (typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else {
+      date = new Date(timestamp);
     }
-    return 'No Date';
+    return date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   return (

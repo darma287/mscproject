@@ -2,10 +2,14 @@ import React from 'react'
 import Data from '../../shared/Data'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react';
+import app from '../../shared/FirebaseConfig';
+import { doc, getFirestore, setDoc, Timestamp } from "firebase/firestore";
+
 
 function Form() {
     const [inputs, setInputs] = useState({});
     const { data: session, status } = useSession();
+    const db = getFirestore(app);
 
     useEffect(() => {
         if (status === "authenticated" && session) {
@@ -21,9 +25,16 @@ function Form() {
         setInputs((values) => ({ ...values, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("OnSubmit", inputs);
+
+        const eventDate = new Date(inputs["Date"]);
+        const timestamp = Timestamp.fromDate(eventDate);
+
+        const updatedInputs = { ...inputs, "Date": timestamp };
+
+        console.log("OnSubmit", updatedInputs);
+        await setDoc(doc(db, "post", Date.now().toString()), updatedInputs);
     };
 
     return (
@@ -31,24 +42,26 @@ function Form() {
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
-                    name="title"
+                    name="Title"
                     placeholder='Title'
                     required
+                    onChange={handleChange}
                     className='w-full mb-4 border-[1px] p-2 outline-blue-400 rounded-md'
                 />
 
                 <textarea
-                    name="desc"
+                    name="Description"
                     placeholder='Write Description Here'
                     required
+                    onChange={handleChange}
                     className='w-full mb-4 border-[1px] p-2 outline-blue-400 rounded-md'
                 />
                 <input
-                    type="date"
-                    name="Date of the Event"
+                    type="datetime-local"
+                    name="Date"
                     required
                     onChange={handleChange}
-                    placeholder='Select Date'
+                    placeholder='Select Date and Time'
                     className='w-full mb-4 border-[1px] p-2 rounded-md'
                 />
                 <input
@@ -69,7 +82,7 @@ function Form() {
                     className="w-full mb-4 border-[1px] p-2 rounded-md"
                 />
                 <select
-                    name="game"
+                    name="sport"
                     onChange={handleChange}
                     required
                     className="w-full mb-4 border-[1px] p-2 rounded-md"
