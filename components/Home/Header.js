@@ -15,7 +15,7 @@ function Header() {
     return (
         <div>
             <div className='flex justify-between p-2 border-b-[2px]'>
-                <Image src="/logoipsum.png" alt="Logo" width={150} height={40} />
+                <Image src="/logoipsum.png" alt="Logo" width={150} height={40} onClick={()=>router.push('/')}/>
                 <div className='flex gap-4 items-center'>
                     <button onClick={()=>router.push('/createpost')} className="bg-black p-2 px-3 text-white rounded-full h-12">
                         <span className='hidden sm:block'>Create Post</span>
@@ -38,7 +38,7 @@ function Header() {
                             <HiOutlineArrowLeftOnRectangle className='sm:hidden text-[20px]' />
                         </button>
                     )}
-                    <Image src={session?session?.user?.image:USER_IMAGE} width={40} height={40} alt="User Profile" className='rounded-full' />
+                    <Image src={session?session?.user?.image:USER_IMAGE} width={40} height={40} alt="User Profile" className='rounded-full' onClick={()=>router.push('/profile')} />
                 </div>
             </div>
         </div>
