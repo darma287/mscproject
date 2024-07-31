@@ -1,15 +1,16 @@
-import React from 'react'
-import Data from '../../shared/Data'
-import { useSession } from 'next-auth/react'
+import React from 'react';
+import Data from '../../shared/Data';
+import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import app from '../../shared/FirebaseConfig';
 import { doc, getFirestore, setDoc, Timestamp } from "firebase/firestore";
-
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 function Form() {
     const [inputs, setInputs] = useState({});
     const { data: session, status } = useSession();
     const db = getFirestore(app);
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
         if (status === "authenticated" && session) {
@@ -25,16 +26,43 @@ function Form() {
         setInputs((values) => ({ ...values, [name]: value }));
     };
 
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+        console.log("File selected:", e.target.files[0]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!file) {
+            console.error("No file selected");
+            return;
+        }
 
         const eventDate = new Date(inputs["Date"]);
         const timestamp = Timestamp.fromDate(eventDate);
 
         const updatedInputs = { ...inputs, "Date": timestamp };
 
-        console.log("OnSubmit", updatedInputs);
-        await setDoc(doc(db, "post", Date.now().toString()), updatedInputs);
+        console.log("OnSubmit inputs:", updatedInputs);
+
+        const storage = getStorage();
+        const storageRef = ref(storage, `sportapp/${file.name}`);
+
+        try {
+            const snapshot = await uploadBytes(storageRef, file);
+            console.log('Uploaded a blob or file!', snapshot);
+
+            const url = await getDownloadURL(storageRef);
+            console.log('File available at', url);
+
+            updatedInputs.image = url;
+
+            await setDoc(doc(db, "post", Date.now().toString()), updatedInputs);
+            console.log('Document successfully written!', updatedInputs);
+        } catch (error) {
+            console.error("Error writing document: ", error);
+        }
     };
 
     return (
@@ -94,6 +122,12 @@ function Form() {
                         <option key={item.id}>{item.name}</option>
                     ))}
                 </select>
+                <input
+                    type="file"
+                    onChange={handleFileChange}
+                    accept="image/gif, image/jpeg, image/png"
+                    className='mb-5 border-[1px] w-full'
+                />
                 <button
                     type="submit"
                     className="bg-blue-500 w-full p-1 rounded-md text-white"
@@ -102,7 +136,7 @@ function Form() {
                 </button>
             </form>
         </div>
-    )
+    );
 }
 
-export default Form
+export default Form;
