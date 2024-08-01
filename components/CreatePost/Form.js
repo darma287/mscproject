@@ -92,6 +92,21 @@ function Form() {
                     placeholder='Select Date and Time'
                     className='w-full mb-4 border-[1px] p-2 rounded-md'
                 />
+                <input 
+                    type="number"
+                    name="PlayersNeeded"
+                    required
+                    onChange={handleChange}
+                    placeholder='Select Date and Time'
+                    className='w-full mb-4 border-[1px] p-2 rounded-md'
+                />
+                <input 
+                    type="number"
+                    name="Price"
+                    required
+                    onChange={handleChange}
+                    className='w-full mb-4 border-[1px] p-2 rounded-md'
+                />
                 <input
                     type="text"
                     name="Location"
@@ -104,13 +119,13 @@ function Form() {
                 <input
                     type="text"
                     placeholder='Post code'
-                    name="Post code"
+                    name="PostCode"
                     required
                     onChange={handleChange}
                     className="w-full mb-4 border-[1px] p-2 rounded-md"
                 />
                 <select
-                    name="sport"
+                    name="Sport"
                     onChange={handleChange}
                     required
                     className="w-full mb-4 border-[1px] p-2 rounded-md"
