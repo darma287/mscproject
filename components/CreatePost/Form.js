@@ -97,7 +97,7 @@ function Form() {
                     name="PlayersNeeded"
                     required
                     onChange={handleChange}
-                    placeholder='Select Date and Time'
+                    placeholder='Number of Players Needed'
                     className='w-full mb-4 border-[1px] p-2 rounded-md'
                 />
                 <input 
@@ -105,6 +105,7 @@ function Form() {
                     name="Price"
                     required
                     onChange={handleChange}
+                    placeholder='Fee Per Person'
                     className='w-full mb-4 border-[1px] p-2 rounded-md'
                 />
                 <input
