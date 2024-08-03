@@ -3,7 +3,7 @@ import Hero from '../../components/Home/Hero';
 import Search from '../../components/Home/Search';
 import SportList from '../../components/Home/SportList';
 import app from '../../shared/FirebaseConfig';
-import { collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc, updateDoc } from "firebase/firestore"; // added updateDoc
 import { getFirestore } from 'firebase/firestore';
 import { Inter } from 'next/font/google';
 import Posts from '../../components/Home/Posts';
@@ -36,7 +36,15 @@ export default function Home() {
     if (session?.user?.email) {
       const joinedPost = { ...post, userEmail: session.user.email }; // Add user email to the joined post
       await setDoc(doc(db, "joinedPosts", `${post.id}-${session.user.email}`), joinedPost); // Add joined post to Firestore
-      // You can also update the local state or notify the user that the post was joined
+
+      // Decrease the PlayersNeeded count by 1
+      const postRef = doc(db, "post", post.id);
+      await updateDoc(postRef, {
+        PlayersNeeded: post.PlayersNeeded - 1
+      });
+
+      // Update the local state to reflect the change in PlayersNeeded
+      setPosts(prevPosts => prevPosts.map(p => p.id === post.id ? { ...p, PlayersNeeded: p.PlayersNeeded - 1 } : p));
     }
   };
 
