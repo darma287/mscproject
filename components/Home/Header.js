@@ -29,7 +29,7 @@ function Header() {
                     >
                         About
                     </p>
-                    <button onClick={() => router.push('/createpost')} className="bg-primary p-2 px-3 text-white rounded-full h-12 flex items-center">
+                    <button onClick={() => router.push('/createpost')} className="bg-primary-500 p-2 px-3 text-white rounded-full h-12 flex items-center">
                         <span className='hidden sm:block'>Post Your Game</span>
                         <HiMiniPencilSquare className='sm:hidden text-[20px]' />
                     </button>
