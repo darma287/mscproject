@@ -3,7 +3,7 @@ import Hero from '../../components/Home/Hero';
 import Search from '../../components/Home/Search';
 import SportList from '../../components/Home/SportList';
 import app from '../../shared/FirebaseConfig';
-import { collection, getDocs, setDoc, doc, updateDoc, query, where } from "firebase/firestore"; // added updateDoc and query, where
+import { collection, getDocs, setDoc, doc, updateDoc, query, where } from "firebase/firestore";
 import { getFirestore } from 'firebase/firestore';
 import { Inter } from 'next/font/google';
 import Posts from '../../components/Home/Posts';
@@ -48,7 +48,7 @@ export default function Home() {
   const onJoinPost = async (post) => {
     console.log("onJoinPost called with post:", post);
     if (session?.user?.email) {
-      const joinedPost = { ...post, userEmail: session.user.email }; // Add user email to the joined post
+      const joinedPost = { ...post, userEmail: session.user.email, postId: post.id }; // Add user email and postId to the joined post
       await setDoc(doc(db, "joinedPosts", `${post.id}-${session.user.email}`), joinedPost); // Add joined post to Firestore
 
       // Decrease the PlayersNeeded count by 1
