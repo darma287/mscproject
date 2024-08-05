@@ -66,87 +66,140 @@ function Form() {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="Title"
-                    placeholder='Title'
-                    required
-                    onChange={handleChange}
-                    className='w-full mb-4 border-[1px] p-2 outline-blue-400 rounded-md'
-                />
+        <div className="max-w-lg mx-auto p-6 bg-background rounded-lg shadow-md">
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Game Details Section */}
+                <section>
+                    <h2 className="text-3xl font-semibold text-primary-700 mb-4">Game Details</h2>
+                    <h4 className="text-lg text-forGrey-800 mb-4">Write the details of your Game</h4>
 
-                <textarea
-                    name="Description"
-                    placeholder='Write Description Here'
-                    required
-                    onChange={handleChange}
-                    className='w-full mb-4 border-[1px] p-2 outline-blue-400 rounded-md'
-                />
-                <input
-                    type="datetime-local"
-                    name="Date"
-                    required
-                    onChange={handleChange}
-                    placeholder='Select Date and Time'
-                    className='w-full mb-4 border-[1px] p-2 rounded-md'
-                />
-                <input 
-                    type="number"
-                    name="PlayersNeeded"
-                    required
-                    onChange={handleChange}
-                    placeholder='Number of Players Needed'
-                    className='w-full mb-4 border-[1px] p-2 rounded-md'
-                />
-                <input 
-                    type="number"
-                    name="Price"
-                    required
-                    onChange={handleChange}
-                    placeholder='Fee Per Person'
-                    className='w-full mb-4 border-[1px] p-2 rounded-md'
-                />
-                <input
-                    type="text"
-                    name="Location"
-                    placeholder='Location of The Event'
-                    required
-                    onChange={handleChange}
-                    className="w-full mb-4 border-[1px] p-2 rounded-md"
-                />
+                    <div className="mb-4">
+                        <label htmlFor="title" className="block text-primary-700 mb-1">Game Title</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="Title"
+                            placeholder="e.g., Sunday Football Match"
+                            required
+                            onChange={handleChange}
+                            className="w-full border-[1px] p-2 outline-primary-400 rounded-md hover:border-primary-100"
+                        />
+                    </div>
 
-                <input
-                    type="text"
-                    placeholder='Post code'
-                    name="PostCode"
-                    required
-                    onChange={handleChange}
-                    className="w-full mb-4 border-[1px] p-2 rounded-md"
-                />
-                <select
-                    name="Sport"
-                    onChange={handleChange}
-                    required
-                    className="w-full mb-4 border-[1px] p-2 rounded-md"
-                >
-                    <option disabled defaultValue>
-                        Select Sport
-                    </option>
-                    {Data.SportList.map((item) => (
-                        <option key={item.id}>{item.name}</option>
-                    ))}
-                </select>
-                <input
-                    type="file"
-                    onChange={handleFileChange}
-                    accept="image/gif, image/jpeg, image/png"
-                    className='mb-5 border-[1px] w-full'
-                />
+                    <div className="mb-4">
+                        <label htmlFor="description" className="block text-primary-700 mb-1">Game Description</label>
+                        <textarea
+                            id="description"
+                            name="Description"
+                            placeholder="e.g., Join us for a friendly football match..."
+                            required
+                            onChange={handleChange}
+                            className="w-full border-[1px] p-2 outline-primary-400 rounded-md hover:border-primary-100"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="date" className="block text-primary-700 mb-1">Date and Time</label>
+                        <input
+                            type="datetime-local"
+                            id="date"
+                            name="Date"
+                            required
+                            onChange={handleChange}
+                            className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="playersNeeded" className="block text-primary-700 mb-1">Number of Players Needed</label>
+                        <input 
+                            type="number"
+                            id="playersNeeded"
+                            name="PlayersNeeded"
+                            placeholder="e.g., 10"
+                            required
+                            onChange={handleChange}
+                            className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="price" className="block text-primary-700 mb-1">Fee Per Person</label>
+                        <input 
+                            type="number"
+                            id="price"
+                            name="Price"
+                            placeholder="e.g., 5"
+                            required
+                            onChange={handleChange}
+                            className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="location" className="block text-primary-700 mb-1">Game Location</label>
+                        <input
+                            type="text"
+                            id="location"
+                            name="Location"
+                            placeholder="e.g., Central Park"
+                            required
+                            onChange={handleChange}
+                            className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="postCode" className="block text-primary-700 mb-1">Post Code</label>
+                        <input
+                            type="text"
+                            id="postCode"
+                            name="PostCode"
+                            placeholder="e.g., 12345"
+                            required
+                            onChange={handleChange}
+                            className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="sport" className="block text-primary-700 mb-1">Sport</label>
+                        <select
+                            id="sport"
+                            name="Sport"
+                            onChange={handleChange}
+                            required
+                            className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
+                        >
+                            <option disabled defaultValue>
+                                Select Sport
+                            </option>
+                            {Data.SportList.map((item) => (
+                                <option key={item.id}>{item.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </section>
+
+                {/* Image Upload Section */}
+                <section>
+                    <h2 className="text-lg font-semibold text-primary-700 mb-4">Game Image</h2>
+                    <div className="mb-4">
+                        <label htmlFor="image" className="block text-primary-700 mb-1">Upload Image</label>
+                        <input
+                            type="file"
+                            id="image"
+                            onChange={handleFileChange}
+                            accept="image/gif, image/jpeg, image/png"
+                            className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
+                        />
+                    </div>
+                </section>
+
+                {/* Submit Button */}
                 <button
                     type="submit"
-                    className="bg-blue-500 w-full p-1 rounded-md text-white"
+                    className="bg-primary-500 w-full p-2 rounded-md text-white"
                 >
                     Submit
                 </button>
@@ -156,3 +209,5 @@ function Form() {
 }
 
 export default Form;
+
+

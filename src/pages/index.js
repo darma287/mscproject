@@ -49,7 +49,7 @@ export default function Home() {
     console.log("onJoinPost called with post:", post);
     if (session?.user?.email) {
       const joinedPost = { ...post, userEmail: session.user.email }; // Add user email to the joined post
-      await setDoc(doc(db, "joinedPosts", `${post.id}-${session.user.email}`), { postId: post.id, userEmail: session.user.email }); // Add joined post to Firestore
+      await setDoc(doc(db, "joinedPosts", `${post.id}-${session.user.email}`), joinedPost); // Add joined post to Firestore
 
       // Decrease the PlayersNeeded count by 1
       const postRef = doc(db, "post", post.id);
