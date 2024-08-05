@@ -12,7 +12,7 @@ function Posts({ posts = [], onJoinPost, joinedPosts }) {
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5 px-10">
         {posts.map((item, index) => (
           <div key={index} className="m-2">
-            <PostItem post={item} onJoin={onJoinPost} isJoined={joinedPosts.includes(item.id)} /> {/* Ensure onJoinPost and isJoined are passed to PostItem */}
+            <PostItem post={item} onJoin={onJoinPost} isJoined={joinedPosts.includes(item.id)} /> 
           </div>
         ))}
       </div>
