@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 
 function Search() {
   const [searchText, setSearchText] = useState('');
+  const router = useRouter();
 
   const onSearchButtonClick = (e) => {
     e.preventDefault();
-    console.log("Search Text:", searchText);
+    if (searchText.trim()) {
+      router.push(`/searchResult?query=${searchText}`);
+    }
   }
 
   return (
