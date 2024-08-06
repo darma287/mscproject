@@ -7,6 +7,13 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
   const hasTitle = post.Title && post.Title.trim() !== "";
   const hasDescription = post.Description && post.Description.trim() !== "";
 
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };
+
   const formatDate = (timestamp) => {
     if (!timestamp) return 'No Date';
     let date;
@@ -38,7 +45,7 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
           </div>
           <div className="flex items-center text-accent gap-2 mb-2">
             <HiOutlineMapPin className="text-[20px]" />
-            {post.Location || 'No Location'} <div></div>
+            {truncateText(post.Location || 'No Location', 20)} <div></div>
             {post.PostCode || 'No Postcode'}
           </div>
           {hasDescription ? (
