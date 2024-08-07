@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import { HiOutlineCalendar, HiOutlineMapPin } from 'react-icons/hi2';
-
+import Image from 'next/image';
 const PostModal = forwardRef(({ post, onClose }, ref) => {
   const hasTitle = post?.Title && post.Title.trim() !== "";
   const hasDescription = post?.Description && post.Description.trim() !== "";

@@ -1,8 +1,9 @@
 import { collection, getDocs, getFirestore, query, where, doc, deleteDoc, setDoc } from 'firebase/firestore';
 import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import app from '../../../shared/FirebaseConfig';
 import PostItem from '../../../components/Home/PostItem';
+import Image from 'next/image';
 
 function Profile() {
   const { data: session } = useSession();
@@ -10,14 +11,7 @@ function Profile() {
   const [joinedPosts, setJoinedPosts] = useState([]);
   const db = getFirestore(app);
 
-  useEffect(() => {
-    if (session) {
-      getUserPosts();
-      getJoinedPosts();
-    }
-  }, [session, getJoinedPosts, getUserPosts]);
-
-  const getUserPosts = async () => {
+  const getUserPosts = useCallback(async () => {
     if (session?.user?.email) {
       const q = query(collection(db, 'post'), where('email', '==', session.user.email));
       const querySnapshot = await getDocs(q);
@@ -29,9 +23,9 @@ function Profile() {
       });
       setUserPosts(posts);
     }
-  };
+  }, [db, session?.user?.email]);
 
-  const getJoinedPosts = async () => {
+  const getJoinedPosts = useCallback(async () => {
     if (session?.user?.email) {
       const q = query(collection(db, 'joinedPosts'), where('userEmail', '==', session.user.email));
       const querySnapshot = await getDocs(q);
@@ -43,7 +37,14 @@ function Profile() {
       });
       setJoinedPosts(posts);
     }
-  };
+  }, [db, session?.user?.email]);
+
+  useEffect(() => {
+    if (session) {
+      getUserPosts();
+      getJoinedPosts();
+    }
+  }, [session, getUserPosts, getJoinedPosts]);
 
   const onDeletePost = async (id) => {
     await deleteDoc(doc(db, "post", id));
@@ -64,7 +65,7 @@ function Profile() {
     <div className="p-6 mt-8 lg:w-[70%] md:w-full mx-auto bg-background text-forGrey-900">
       <div className="p-6 bg-white shadow-sm rounded-lg mb-8">
         <h2 className="text-2xl font-extrabold text-primary-500 mb-4">Profile</h2>
-        <Image src={session?.user?.image} alt="User Picture" className="w-16 h-16 rounded-full mr-4" />
+        <Image src={session?.user?.image} alt="User Picture" className="w-16 h-16 rounded-full mr-4" width={64} height={64} />
           <div>
             <p className="text-lg"><strong>Name:</strong> {session?.user?.name}</p>
             <p className="text-lg"><strong>Email:</strong> {session?.user?.email}</p>
