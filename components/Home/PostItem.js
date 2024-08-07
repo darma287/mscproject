@@ -69,7 +69,7 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
             {post.PostCode || 'No Postcode'}
           </div>
           {hasDescription ? (
-            <p className="mb-3 font-normal text-gray-700">{post.Description}</p>
+            <p className="mb-3 font-normal text-gray-700">{truncateText(post.Description || 'No Description', 30)}</p>
           ) : (
             <p className="mb-3 font-normal text-gray-700">No Description</p>
           )}

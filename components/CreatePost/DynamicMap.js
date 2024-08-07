@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
-import L from 'leaflet';
 import axios from 'axios';
+import L from 'leaflet'
 
 // Fix for default icon issue with Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
