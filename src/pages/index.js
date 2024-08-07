@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Hero from '../../components/Home/Hero';
 import Search from '../../components/Home/Search';
 import SportList from '../../components/Home/SportList';
@@ -17,7 +17,7 @@ export default function Home() {
   const { data: session } = useSession();
   const db = getFirestore(app);
 
-  const getPost = async () => {
+  const getPost = useCallback(async () => {
     const querySnapshot = await getDocs(collection(db, "post"));
     const postsArray = [];
     querySnapshot.forEach((doc) => {
@@ -26,9 +26,9 @@ export default function Home() {
       postsArray.push(data);
     });
     setPosts(postsArray);
-  };
+  }, [db]);
 
-  const getJoinedPosts = async () => {
+  const getJoinedPosts = useCallback(async () => {
     if (session?.user?.email) {
       const q = query(collection(db, "joinedPosts"), where("userEmail", "==", session.user.email));
       const querySnapshot = await getDocs(q);
@@ -38,7 +38,7 @@ export default function Home() {
       });
       setJoinedPosts(joinedPostsArray);
     }
-  };
+  }, [db, session?.user?.email]);
 
   useEffect(() => {
     getPost();
