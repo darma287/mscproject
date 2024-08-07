@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { HiOutlineCalendar, HiOutlineMapPin } from 'react-icons/hi2';
 import Image from 'next/image';
 
-
 function PostItem({ post, onJoin, isJoined, onReadMore }) {
   console.log("PostItem onJoin:", onJoin);
+
+  const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 180 });
+
+  useEffect(() => {
+    if (post.image) {
+      const img = new window.Image();
+      img.src = post.image;
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        setImageDimensions({ width: aspectRatio * 180, height: 180 });
+      };
+    }
+  }, [post.image]);
 
   const hasTitle = post.Title && post.Title.trim() !== "";
   const hasDescription = post.Description && post.Description.trim() !== "";
@@ -29,10 +41,16 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
 
   return (
     <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-      {post.image ? (
-        <Image className="rounded-t-lg w-full h-[180px]" src={post.image} alt="Post image" />
+      {post.image && imageDimensions.width > 0 && imageDimensions.height > 0 ? (
+        <Image 
+          className="rounded-t-lg w-full h-[180px]" 
+          src={post.image} 
+          alt="Post image" 
+          width={imageDimensions.width} 
+          height={imageDimensions.height}
+        />
       ) : (
-        <div className="rounded-t-lg bg-gray-200 h-48 flex items-center justify-center">Missing Image</div>
+        <div className="rounded-t-lg bg-gray-200 h-48 flex items-center justify-center">Loading image...</div>
       )}
       <div className="p-5 flex flex-col justify-between h-full">
         <div>
