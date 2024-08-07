@@ -5,11 +5,9 @@ import SportList from '../../components/Home/SportList';
 import app from '../../shared/FirebaseConfig';
 import { collection, getDocs, setDoc, doc, updateDoc, query, where } from "firebase/firestore";
 import { getFirestore } from 'firebase/firestore';
-import { Inter } from 'next/font/google';
 import Posts from '../../components/Home/Posts';
 import { useSession } from 'next-auth/react';
 
-const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
