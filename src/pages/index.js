@@ -43,7 +43,7 @@ export default function Home() {
   useEffect(() => {
     getPost();
     getJoinedPosts();
-  }, [session]);
+  }, [session, getJoinedPosts, getPost]);
 
   const onJoinPost = async (post) => {
     console.log("onJoinPost called with post:", post);

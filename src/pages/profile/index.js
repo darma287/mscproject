@@ -15,7 +15,7 @@ function Profile() {
       getUserPosts();
       getJoinedPosts();
     }
-  }, [session]);
+  }, [session, getJoinedPosts, getUserPosts]);
 
   const getUserPosts = async () => {
     if (session?.user?.email) {
@@ -64,7 +64,7 @@ function Profile() {
     <div className="p-6 mt-8 lg:w-[70%] md:w-full mx-auto bg-background text-forGrey-900">
       <div className="p-6 bg-white shadow-sm rounded-lg mb-8">
         <h2 className="text-2xl font-extrabold text-primary-500 mb-4">Profile</h2>
-        <img src={session?.user?.image} alt="User Picture" className="w-16 h-16 rounded-full mr-4" />
+        <Image src={session?.user?.image} alt="User Picture" className="w-16 h-16 rounded-full mr-4" />
           <div>
             <p className="text-lg"><strong>Name:</strong> {session?.user?.name}</p>
             <p className="text-lg"><strong>Email:</strong> {session?.user?.email}</p>

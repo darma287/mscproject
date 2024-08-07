@@ -23,7 +23,7 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={onClose}>✕</button>
           <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
             {post.image ? (
-              <img className="rounded-t-lg w-full h-[180px]" src={post.image} alt="Post image" />
+              <Image className="rounded-t-lg w-full h-[180px]" src={post.image} alt="Post image" />
             ) : (
               <div className="rounded-t-lg bg-gray-200 h-48 flex items-center justify-center">Missing Image</div>
             )}
@@ -69,5 +69,6 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
     </dialog>
   );
 });
+PostModal.displayName = 'PostModal';
 
 export default PostModal;
