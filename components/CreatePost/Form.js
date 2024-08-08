@@ -17,19 +17,20 @@ function Form() {
 
   useEffect(() => {
     if (status === "authenticated" && session) {
-      setInputs((values) => ({ ...values, userName: session.user.name }));
-      setInputs((values) => ({ ...values, userImage: session.user.image }));
-      setInputs((values) => ({ ...values, email: session.user.email }));
+      // Set user details in state when authenticated
+      setInputs((values) => ({ ...values, userName: session.user.name, userImage: session.user.image, email: session.user.email }));
     }
   }, [session, status]);
 
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+    // Update state for input changes
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
   const handleFileChange = (e) => {
+    // Set file state when a file is selected
     setFile(e.target.files[0]);
   };
 
@@ -44,7 +45,8 @@ function Form() {
     const eventDate = new Date(inputs["Date"]);
     const timestamp = Timestamp.fromDate(eventDate);
 
-    const updatedInputs = { ...inputs, "Date": timestamp, "Location": location.name };
+    // Include location name and date as a timestamp in updatedInputs
+    const updatedInputs = { ...inputs, "Date": timestamp, "Location": location ? location.name : '' };
 
     const storage = getStorage();
     const storageRef = ref(storage, `sportapp/${file.name}`);
@@ -54,6 +56,7 @@ function Form() {
       const url = await getDownloadURL(storageRef);
       updatedInputs.image = url;
 
+      // Write updatedInputs to Firestore
       await setDoc(doc(db, "post", Date.now().toString()), updatedInputs);
     } catch (error) {
       console.error("Error writing document: ", error);
@@ -153,11 +156,10 @@ function Form() {
               required
               className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
             >
-              <option disabled defaultValue>
-                Select Sport
-              </option>
+              {/* Added value attribute to ensure selected sport is correctly set */}
+              <option value="" disabled selected>Select Sport</option>
               {Data.SportList.map((item) => (
-                <option key={item.id}>{item.name}</option>
+                <option key={item.id} value={item.name}>{item.name}</option>
               ))}
             </select>
           </div>

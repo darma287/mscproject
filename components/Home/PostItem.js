@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HiOutlineCalendar, HiOutlineMapPin } from 'react-icons/hi2';
+import { HiOutlineCalendar, HiOutlineMapPin, HiOutlineCube } from 'react-icons/hi2';
 import Image from 'next/image';
 
 function PostItem({ post, onJoin, isJoined, onReadMore }) {
@@ -59,6 +59,10 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
           ) : (
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-primary">No Title</h5>
           )}
+          <div className="flex items-center text-accent gap-2 mb-2">
+          <HiOutlineCube className="text-[20px]" />
+            {post.Sport || 'Type of sport undefine'}
+          </div>
           <div className="flex items-center text-accent gap-2 mb-2">
             <HiOutlineCalendar className="text-[20px]" />
             {formatDate(post.Date)}
