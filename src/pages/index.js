@@ -7,13 +7,25 @@ import { collection, getDocs, setDoc, doc, updateDoc, query, where } from "fireb
 import { getFirestore } from 'firebase/firestore';
 import Posts from '../../components/Home/Posts';
 import { useSession } from 'next-auth/react';
-
+import axios from 'axios';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [joinedPosts, setJoinedPosts] = useState([]);
+  const [userCity, setUserCity] = useState('');
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const { data: session } = useSession();
   const db = getFirestore(app);
+
+  // Function to get the user's city using an IP geolocation API
+  const getUserCity = async () => {
+    try {
+      const response = await axios.get('https://ipapi.co/json/');
+      setUserCity(response.data.city);
+    } catch (error) {
+      console.error('Error fetching user city:', error);
+    }
+  };
 
   const getPost = useCallback(async () => {
     const querySnapshot = await getDocs(collection(db, "post"));
@@ -39,9 +51,17 @@ export default function Home() {
   }, [db, session?.user?.email]);
 
   useEffect(() => {
+    getUserCity();
     getPost();
     getJoinedPosts();
   }, [session, getJoinedPosts, getPost]);
+
+  useEffect(() => {
+    if (userCity) {
+      const filtered = posts.filter(post => post.City === userCity);
+      setFilteredPosts(filtered);
+    }
+  }, [userCity, posts]);
 
   const onJoinPost = async (post) => {
     console.log("onJoinPost called with post:", post);
@@ -66,8 +86,17 @@ export default function Home() {
       <Hero />
       <h2 className='mt-16'>Discover All Sport: </h2>
       {posts.length > 0 ? <Posts posts={posts} onJoinPost={onJoinPost} joinedPosts={joinedPosts} /> : null} {/* Pass onJoinPost and joinedPosts to Posts */}
-      <h2 className='mt-16'>How It Works </h2>
-
+      
+      <div>
+        <h2>Games in Your Location: {userCity}</h2>
+        {filteredPosts.length > 0 ? (
+          <Posts posts={filteredPosts} onJoinPost={onJoinPost} joinedPosts={joinedPosts} />
+        ) : (
+          <p>No games available in your location.</p>
+        )}
+      </div>
+      
+      <h2 className='mt-16'>How It Works</h2>
     </main>
   );
 }

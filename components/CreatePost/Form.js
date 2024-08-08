@@ -135,12 +135,12 @@ function Form() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="postCode" className="block text-primary-700 mb-1">Post Code</label>
+            <label htmlFor="city" className="block text-primary-700 mb-1">City</label>
             <input
               type="text"
-              id="postCode"
-              name="PostCode"
-              placeholder="e.g., 12345"
+              id="city"
+              name="City"
+              placeholder="e.g., New York"
               required
               onChange={handleChange}
               className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"

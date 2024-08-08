@@ -70,7 +70,7 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
           <div className="flex items-center text-accent gap-2 mb-2">
             <HiOutlineMapPin className="text-[20px]" />
             {truncateText(post.Location || 'No Location', 20)} <div></div>
-            {post.PostCode || 'No Postcode'}
+            {post.City || 'No City'}
           </div>
           {hasDescription ? (
             <p className="mb-3 font-normal text-gray-700">{truncateText(post.Description || 'No Description', 30)}</p>

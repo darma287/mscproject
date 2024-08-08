@@ -108,3 +108,7 @@ const SearchResult = () => {
 };
 
 export default SearchResult;
+
+
+//Bug:
+//Fix CSS on showing result
