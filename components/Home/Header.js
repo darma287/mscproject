@@ -15,7 +15,7 @@ function Header() {
     return (
         <div>
             <div className='flex justify-between p-2 border-b-[2px] h-[80px]'>
-                <Image src="/logo-color.svg" alt="Logo" width={150} height={40} onClick={() => router.push('/')} />
+                <Image src="/logo-color.svg" className='cursor-pointer' alt="Logo" width={150} height={40} onClick={() => router.push('/')} />
                 <div className='flex gap-4 items-center'>
                     <p 
                         onClick={() => router.push('/')} 

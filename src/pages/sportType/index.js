@@ -6,7 +6,7 @@ import app from '../../../shared/FirebaseConfig';
 import PostItem from '../../../components/Home/PostItem';
 import PostModal from '../../../components/Home/PostModal';
 
-const sportType = () => {
+const SportType = () => {
   const router = useRouter();
   const { query: searchQuery } = router.query;
   const [results, setResults] = useState([]);
@@ -79,21 +79,25 @@ const sportType = () => {
   return (
     <div className="max-w-7xl mx-auto mt-8">
       <h1 className="text-2xl font-bold mb-4">Games category: &quot;{searchQuery}&quot;</h1>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5 px-10">
-        {results.map((item, index) => (
-          <div key={index} className="m-2">
-            <PostItem 
-              post={item} 
-              onJoin={() => onJoinPost(item)} 
-              isJoined={joinedPosts.includes(item.id)} 
-              onReadMore={() => handleReadMore(item)} 
-            />
-          </div>
-        ))}
+      <div className="flex items-center justify-center gap-4 mt-5 px-10">
+        {results.length > 0 ? (
+          results.map((item, index) => (
+            <div key={index} className="m-2">
+              <PostItem 
+                post={item} 
+                onJoin={() => onJoinPost(item)} 
+                isJoined={joinedPosts.includes(item.id)} 
+                onReadMore={() => handleReadMore(item)} 
+              />
+            </div>
+          ))
+        ) : (
+<p className='flex items-center justify-center mt-4 mb-4 w-full h-full'>Nothing available</p>
+        )}
       </div>
       <PostModal ref={modalRef} post={selectedPost} onClose={handleCloseModal} />
     </div>
   );
 };
 
-export default sportType;
+export default SportType;
