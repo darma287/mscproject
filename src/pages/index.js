@@ -64,9 +64,10 @@ export default function Home() {
   return (
     <main className="p-5 sm:px-7 md:px-10">
       <Hero />
-      <Search />
-      <SportList />
+      <h2 className='mt-16'>Discover All Sport: </h2>
       {posts.length > 0 ? <Posts posts={posts} onJoinPost={onJoinPost} joinedPosts={joinedPosts} /> : null} {/* Pass onJoinPost and joinedPosts to Posts */}
+      <h2 className='mt-16'>How It Works </h2>
+
     </main>
   );
 }
