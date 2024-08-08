@@ -66,8 +66,8 @@ export default function Home() {
   const onJoinPost = async (post) => {
     console.log("onJoinPost called with post:", post);
     if (session?.user?.email) {
-      const joinedPost = { ...post, userEmail: session.user.email, postId: post.id }; // Add user email and postId to the joined post
-      await setDoc(doc(db, "joinedPosts", `${post.id}-${session.user.email}`), joinedPost); // Add joined post to Firestore
+      const joinedPost = { ...post, userEmail: session.user.email, postId: post.id }; 
+      await setDoc(doc(db, "joinedPosts", `${post.id}-${session.user.email}`), joinedPost); 
 
       // Decrease the PlayersNeeded count by 1
       const postRef = doc(db, "post", post.id);
@@ -85,7 +85,7 @@ export default function Home() {
     <main className="p-5 sm:px-7 md:px-10">
       <Hero />
       <h2 className='mt-16'>Discover All Sport: </h2>
-      {posts.length > 0 ? <Posts posts={posts} onJoinPost={onJoinPost} joinedPosts={joinedPosts} /> : null} {/* Pass onJoinPost and joinedPosts to Posts */}
+      {posts.length > 0 ? <Posts posts={posts} onJoinPost={onJoinPost} joinedPosts={joinedPosts} /> : null} 
       
       <div>
         <h2>Games in Your Location: {userCity}</h2>

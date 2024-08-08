@@ -81,30 +81,30 @@ const SearchResult = () => {
   return (
     <div className="max-w-7xl mx-auto mt-8">
       <h1 className="text-2xl font-bold mb-4">Search Results for: &quot;{searchQuery}&quot;</h1>
-      <div className="flex items-center justify-center gap-4 mt-5 px-10">
       {results.length > 0 ? (
-        results.map((item, index) => (
-          <div key={index} className="m-2">
-            <PostItem 
-              post={item} 
-              onJoin={() => onJoinPost(item)} 
-              isJoined={joinedPosts.includes(item.id)} 
-              onReadMore={() => handleReadMore(item)} 
-            />
-          </div>
-        ))       
-         ) : (
-          <div className='flex flex-col align-middle items-center justify-center mt-4 mb-4 w-full h-full'>
-          <h3  className='mt-8 mb-8'>Nothing available</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5 px-10 justify-items-center items-center">
+          {results.map((item, index) => (
+            <div key={index} className="m-2">
+              <PostItem 
+                post={item} 
+                onJoin={() => onJoinPost(item)} 
+                isJoined={joinedPosts.includes(item.id)} 
+                onReadMore={() => handleReadMore(item)} 
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className='flex flex-col items-center justify-center mt-4 mb-4 w-full h-full'>
+          <h3 className='mt-8 mb-8'>Nothing available</h3>
           <p className='mt-8 mb-2'>You might want to refine your search</p>
           <div className='w-full mb-80'><Search /></div>
-          </div>
-          
-                  )}
-      </div>
+        </div>
+      )}
       <PostModal ref={modalRef} post={selectedPost} onClose={handleCloseModal} />
     </div>
   );
+  
 };
 
 export default SearchResult;
