@@ -78,7 +78,7 @@ const sportType = () => {
 
   return (
     <div className="max-w-7xl mx-auto mt-8">
-      <h1 className="text-2xl font-bold mb-4">Games type: &quot;{searchQuery}&quot;</h1>
+      <h1 className="text-2xl font-bold mb-4">Games category: &quot;{searchQuery}&quot;</h1>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5 px-10">
         {results.map((item, index) => (
           <div key={index} className="m-2">
