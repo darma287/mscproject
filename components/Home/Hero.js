@@ -14,7 +14,7 @@ function Hero() {
                     objectFit="cover"
                     className="rounded-lg"
                 />
-                <div className="absolute inset-0 bg-black opacity-50 rounded-lg"></div>
+                <div className="absolute inset-0 bg-black opacity-70 rounded-lg"></div>
             </div>
             <div className="relative z-10 max-w-[800px] text-center text-white p-4">
                 <h1 className="text-wrapper">Find Your Mate and Start Your Game</h1>
