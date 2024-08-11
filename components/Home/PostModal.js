@@ -97,6 +97,10 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
                                     <h3 className="text-xl font-semibold">Reviews</h3>
                                     <p className="text-gray-700">No Reviews Yet</p>
                                 </div>
+                                <div className="mt-4">
+                                    <h3 className="text-xl font-semibold">Map Location</h3>
+                                    <p className="text-gray-700">{post.Location}</p>
+                                </div>
                             </div>
                             <div className="flex justify-end mt-4">
                                 <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-primary-500 border border-primary-500 rounded-lg focus:ring-4 focus:outline-none hover:bg-primary-100 focus:ring-primary-200"

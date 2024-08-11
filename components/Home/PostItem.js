@@ -112,3 +112,6 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
 }
 
 export default PostItem;
+
+//bug to fix:
+//fix the height of the cards/posts

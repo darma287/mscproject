@@ -141,3 +141,4 @@ export default Profile;
 //bug to fix:
 //handle cancel -> add number of players back, delete from joinedSport list
 //handle readmore -> open postModal
+//fix past game

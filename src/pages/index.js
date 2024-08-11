@@ -100,3 +100,6 @@ export default function Home() {
     </main>
   );
 }
+
+//Bug to fix:
+//

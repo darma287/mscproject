@@ -106,4 +106,3 @@ export default SportType;
 
 
 //Bug:
-//Fix CSS on showing result

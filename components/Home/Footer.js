@@ -27,7 +27,7 @@ function Footer() {
           <div className="text-forGrey opacity-45 text-sm">
             Created by Darma Paramarta
             <br />
-            for University of Glasgow MSc Program
+            for University of Glasgow MSc IT Program
           </div>
         </div>
 
