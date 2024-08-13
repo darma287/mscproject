@@ -4,7 +4,10 @@ import React, { useEffect, useState, useCallback } from 'react';
 import app from '../../../shared/FirebaseConfig';
 import PostItem from '../../../components/Home/PostItem';
 import Image from 'next/image';
-import JoinedPost from '../../../components/Home/JoinedPost';
+import UpcomingGames from '../../../components/Home/UpcomingGames';
+import PastGames from '../../../components/Home/PastGames'; 
+import JoinedGames from '../../../components/Home/JoinedGames';
+
 
 function Profile() {
   const { data: session } = useSession();
@@ -38,21 +41,26 @@ function Profile() {
         data.id = doc.id;
         posts.push(data);
       });
+  
       const today = new Date();
       const past = [];
       const upcoming = [];
+  
       posts.forEach(post => {
-        const postDate = new Date(post.Date);
+        // Convert Firestore Timestamp to JavaScript Date object
+        const postDate = post.Date.toDate();
         if (postDate < today) {
           past.push(post);
         } else {
           upcoming.push(post);
         }
       });
+  
       setPastGames(past);
       setUpcomingGames(upcoming);
     }
   }, [db, session?.user?.email]);
+  
 
   useEffect(() => {
     if (session) {
@@ -61,12 +69,7 @@ function Profile() {
     }
   }, [session, getUserPosts, getJoinedPosts]);
 
-  const onDeletePost = async (id) => {
-    await deleteDoc(doc(db, "post", id));
-    setUserPosts(userPosts.filter(post => post.id !== id));
-    await deleteDoc(doc(db, "joinedPosts", id));
-    setJoinedPosts(joinedPosts.filter(post => post.id !== id));
-  };
+
 
   const onJoinPost = async (post) => {
     if (session?.user?.email) {
@@ -94,13 +97,7 @@ function Profile() {
             {userPosts && userPosts.map((item, index) => (
               <div key={index} className="bg-white shadow-sm rounded-lg">
                 <div className="p-4">
-                  <PostItem post={item} />
-                  <button
-                    onClick={() => onDeletePost(item.id)}
-                    className="mt-2 px-4 py-2 bg-secondary-500 text-white rounded hover:bg-secondary-700 w-full"
-                  >
-                    Delete
-                  </button>
+                  <JoinedGames post={item} />
                 </div>
               </div>
             ))}
@@ -114,7 +111,7 @@ function Profile() {
               {pastGames && pastGames.map((item, index) => (
                 <div key={index} className="bg-white shadow-sm rounded-lg">
                   <div className="p-4">
-                    <PostItem post={item} />
+                    <PastGames post={item} />
                   </div>
                 </div>
               ))}
@@ -124,7 +121,7 @@ function Profile() {
               {upcomingGames && upcomingGames.map((item, index) => (
                 <div key={index} className="bg-white shadow-sm rounded-lg">
                   <div className="p-4">
-                    <JoinedPost post={item} />
+                    <UpcomingGames post={item} />
                   </div>
                 </div>
               ))}
