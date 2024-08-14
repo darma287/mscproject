@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { getFirestore, doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useSession } from 'next-auth/react';
+import app from '../../../shared/FirebaseConfig';
 
 function CreateReview() {
   const router = useRouter();
   const { postId, title, date, location, price, playersNeeded, image } = router.query;
   const [reviewText, setReviewText] = useState("");
-
+  const [file, setFile] = useState(null);
+  const { data: session } = useSession(); // Get session data from NextAuth
+  const db = getFirestore(app);
   const [formattedDate, setFormattedDate] = useState('');
+  const [organizer, setOrganizer] = useState(''); // State for the organizer's email
 
   useEffect(() => {
     if (date) {
@@ -15,11 +22,30 @@ function CreateReview() {
       setFormattedDate(postDate.toLocaleDateString() + ' ' + postDate.toLocaleTimeString());
     }
   }, [date]);
-  
+
+  useEffect(() => {
+    // Fetch the post document to get the Organizer email
+    const fetchPostData = async () => {
+      if (postId) {
+        const postDocRef = doc(db, 'joinedPosts', postId);
+        const postDocSnap = await getDoc(postDocRef);
+        if (postDocSnap.exists()) {
+          const postData = postDocSnap.data();
+          setOrganizer(postData.email); 
+        } else {
+          console.error('No such post!');
+        }
+      }
+    };
+
+    fetchPostData();
+  }, [db, postId]);
+
   const handleFileChange = (e) => {
     // Set file state when a file is selected
     setFile(e.target.files[0]);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -34,10 +60,12 @@ function CreateReview() {
       userName: session?.user?.name,
       userEmail: session?.user?.email,
       userImage: session?.user?.image,
+      postId: postId,  // Include the postId to reference the original post
+      organizer: organizer,  // Include the Organizer email
     };
 
     if (file) {
-      const storage = getStorage();
+      const storage = getStorage(app); // Initialize storage with the Firebase app
       const storageRef = ref(storage, `reviews/${file.name}`);
 
       try {
@@ -55,6 +83,7 @@ function CreateReview() {
       // Optionally, you can reset the form here after successful submission
       setReviewText("");
       setFile(null);
+      router.push('/thankyou'); // Redirect after successful submission, if desired
     } catch (error) {
       console.error("Error writing document: ", error);
     }
@@ -80,9 +109,10 @@ function CreateReview() {
         <p className="text-md text-gray-700">Location: {location}</p>
         <p className="text-md text-gray-700">Price: £{price}</p>
         <p className="text-md text-gray-700">Players Needed: {playersNeeded}</p>
+        <p className="text-md text-gray-700">Organizer: {organizer}</p> 
       </div>
 
-      {/* Your review form goes here */}
+      {/* Review form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Review Input Section */}
         <section>

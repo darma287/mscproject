@@ -1,9 +1,12 @@
 import React, { forwardRef, useState, useEffect } from 'react';
 import { HiOutlineCalendar, HiOutlineMapPin } from 'react-icons/hi2';
 import Image from 'next/image';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import app from '../../shared/FirebaseConfig';
 
 const PostModal = forwardRef(({ post, onClose }, ref) => {
     const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 180 });
+    const [reviews, setReviews] = useState([]); // State to store fetched reviews
 
     useEffect(() => {
         if (post?.image) {
@@ -15,6 +18,25 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
             };
         }
     }, [post?.image]);
+
+    useEffect(() => {
+        // Fetch reviews from Firestore where post.email matches Review.organizer
+        const fetchReviews = async () => {
+            const db = getFirestore(app);
+            const reviewsRef = collection(db, 'Review');
+            const q = query(reviewsRef, where('organizer', '==', post?.email));
+            const querySnapshot = await getDocs(q);
+            const fetchedReviews = [];
+            querySnapshot.forEach((doc) => {
+                fetchedReviews.push(doc.data());
+            });
+            setReviews(fetchedReviews);
+        };
+
+        if (post?.email) {
+            fetchReviews();
+        }
+    }, [post?.email]);
 
     const hasTitle = post?.Title && post.Title.trim() !== "";
     const hasDescription = post?.Description && post.Description.trim() !== "";
@@ -95,7 +117,16 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
                                 </div>
                                 <div className="mt-4">
                                     <h3 className="text-xl font-semibold">Reviews</h3>
-                                    <p className="text-gray-700">No Reviews Yet</p>
+                                    {reviews.length > 0 ? (
+                                        reviews.map((review, index) => (
+                                            <div key={index} className="mb-4">
+                                                <p className="text-gray-700">{review.text}</p>
+                                                <p className="text-sm text-gray-500">By: {review.userName}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-gray-700">No Reviews Yet</p>
+                                    )}
                                 </div>
                                 <div className="mt-4">
                                     <h3 className="text-xl font-semibold">Map Location</h3>
