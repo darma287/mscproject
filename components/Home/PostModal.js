@@ -6,7 +6,7 @@ import app from '../../shared/FirebaseConfig';
 
 const PostModal = forwardRef(({ post, onClose }, ref) => {
     const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 180 });
-    const [reviews, setReviews] = useState([]); // State to store fetched reviews
+    const [reviews, setReviews] = useState([]); 
 
     useEffect(() => {
         if (post?.image) {
@@ -20,7 +20,6 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
     }, [post?.image]);
 
     useEffect(() => {
-        // Fetch reviews from Firestore where post.email matches Review.organizer
         const fetchReviews = async () => {
             const db = getFirestore(app);
             const reviewsRef = collection(db, 'Review');
@@ -50,6 +49,12 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
             date = new Date(timestamp);
         }
         return date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    // Helper to generate Google Maps URL
+    const generateGoogleMapsUrl = (location) => {
+        const query = encodeURIComponent(location);
+        return `https://www.google.com/maps/embed/v1/place?key=AIzaSyCOeAyDR1G61zzk6LpzDU0d_ZLaQDK3b8M&q=${query}`;
     };
 
     return (
@@ -119,7 +124,7 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
                                     <h3 className="text-xl font-semibold">Reviews</h3>
                                     {reviews.length > 0 ? (
                                         reviews.map((review, index) => (
-                                            <div key={index} className="mb-4">
+                                            <div key={index} className="mb-4 p-4 rounded-s-sm shadow-sm">
                                                 <p className="text-gray-700">{review.text}</p>
                                                 <p className="text-sm text-gray-500">By: {review.userName}</p>
                                             </div>
@@ -130,7 +135,20 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
                                 </div>
                                 <div className="mt-4">
                                     <h3 className="text-xl font-semibold">Map Location</h3>
-                                    <p className="text-gray-700">{post.Location}</p>
+                                    {post.Location ? (
+                                        <iframe
+                                            src={generateGoogleMapsUrl(post.Location)}
+                                            width="100%"
+                                            height="300"
+                                            style={{ border: 0 }}
+                                            allowFullScreen=""
+                                            loading="lazy"
+                                            referrerPolicy="no-referrer-when-downgrade"
+                                            title="Map Location"
+                                        ></iframe>
+                                    ) : (
+                                        <p className="text-gray-700">No Location Available</p>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex justify-end mt-4">
