@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { HiOutlineCalendar, HiOutlineMapPin } from 'react-icons/hi2';
 import Image from 'next/image';
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { getFirestore } from 'firebase/firestore';
+import { useSession } from 'next-auth/react';
 
-function UpcomingGames({ post, onJoin, isJoined, onReadMore }) {
-  console.log("PostItem onJoin:", onJoin);
-
+function UpcomingGames({ post, isJoined, onReadMore }) {
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 180 });
+  const { data: session } = useSession();
+  const db = getFirestore();
 
   useEffect(() => {
     if (post.image) {
@@ -37,6 +40,27 @@ function UpcomingGames({ post, onJoin, isJoined, onReadMore }) {
       date = new Date(timestamp);
     }
     return date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const handleCancel = async () => {
+    if (isJoined) {
+      try {
+        const joinedPostDocRef = doc(db, "joinedPosts", `${post.id}-${session.user.email}`);
+        await deleteDoc(joinedPostDocRef);
+
+        // Increase the PlayersNeeded count by 1
+        const postRef = doc(db, "post", post.id);
+        await updateDoc(postRef, {
+          PlayersNeeded: post.PlayersNeeded + 1,
+        });
+
+        // Optionally, you might want to update the local state to reflect the change
+        setPosts(prevPosts => prevPosts.map(p => p.id === post.id ? { ...p, PlayersNeeded: p.PlayersNeeded + 1 } : p));
+        setJoinedPosts(prevJoinedPosts => prevJoinedPosts.filter(postId => postId !== post.id));
+      } catch (error) {
+        console.error("Error canceling join:", error);
+      }
+    }
   };
 
   return (
@@ -82,18 +106,10 @@ function UpcomingGames({ post, onJoin, isJoined, onReadMore }) {
         </div>
         <div className="flex justify-between mt-4">
           <button
-            onClick={() => onJoin(post)}
-            disabled={post.PlayersNeeded <= 0 || isJoined}
-            className={`inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none ${
-              post.PlayersNeeded <= 0 || isJoined ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-500 hover:bg-primary-600 focus:ring-primary-300'
-            }`}
+            onClick={handleCancel}
+            className={`inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-500 hover:bg-red-600`}
           >
-            {post.PlayersNeeded <= 0 ? 'Game is full' : isJoined ? 'Joined' : 'Cancel'}
-            {!isJoined && post.PlayersNeeded > 0 && (
-              <svg className="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-              </svg>
-            )}
+            Cancel
           </button>
           <button
             onClick={() => onReadMore(post)}
@@ -108,4 +124,3 @@ function UpcomingGames({ post, onJoin, isJoined, onReadMore }) {
 }
 
 export default UpcomingGames;
-

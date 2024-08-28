@@ -8,7 +8,9 @@ import { getFirestore } from 'firebase/firestore';
 import Posts from '../../components/Home/Posts';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
-
+import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
+import { Box, Text, Heading, Stack, Icon } from '@chakra-ui/react';
+import { FaPlusCircle, FaRegHandshake } from 'react-icons/fa';
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [joinedPosts, setJoinedPosts] = useState([]);
@@ -84,7 +86,7 @@ export default function Home() {
   return (
     <main className="p-5 sm:px-7 md:px-10">
       <Hero />
-      <h2 className='mt-16'>Discover All Sport: </h2>
+      <h2 className="mt-16">Discover All Sport: </h2>
       {posts.length > 0 ? <Posts posts={posts} onJoinPost={onJoinPost} joinedPosts={joinedPosts} /> : null} 
       
       <div>
@@ -96,7 +98,42 @@ export default function Home() {
         )}
       </div>
       
-      <h2 className='mt-16'>How It Works</h2>
+      <h2 className="mt-16 justify-center flex">How It Works</h2>
+      <div className="flex flex-col md:flex-row gap-8 mt-8 justify-center">
+        <div className="bg-gray-100 rounded-lg p-5 flex flex-col justify-between h-800 max-w-sm">
+          <div>
+            <div className="flex justify-center mb-4">
+              <FaPlusCircle className="text-primary-500 text-4xl" />
+            </div>
+            <h3 className="text-xl font-bold text-center mb-4">Create a Game</h3>
+            <p className="text-center text-gray-700">
+              Start your own game and invite others to join. Simply choose your sport, set a location, and pick a time.
+            </p>
+          </div>
+          <div className="flex justify-center mt-4">
+            <button className="bg-primary-500 text-white px-3 py-2 rounded-lg hover:bg-primary-600">
+              Start Now
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 rounded-lg p-5 flex flex-col justify-between h-800 max-w-sm">
+          <div>
+            <div className="flex justify-center mb-4">
+              <FaRegHandshake className="text-primary-500 text-4xl" />
+            </div>
+            <h3 className="text-xl font-bold text-center mb-4">Join a Game</h3>
+            <p className="text-center text-gray-700">
+              Browse available games in your area, find one that fits your schedule, and join the action!
+            </p>
+          </div>
+          <div className="flex justify-center mt-4">
+            <button className="bg-primary-500 text-white px-3 py-2 rounded-lg hover:bg-primary-600">
+              Find a Game
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
