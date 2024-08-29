@@ -86,8 +86,10 @@ export default function Home() {
       <h2 className="mt-16">Discover All Sport: </h2>
       {posts.length > 0 ? <Posts posts={posts} onJoinPost={onJoinPost} joinedPosts={joinedPosts} /> : null} 
       
-      <div>
-        <h2>Games in Your Location: {userCity}</h2>
+      <div className='mt-20'>
+        <div className='flex'>
+          <h2>Games in Your Location:  </h2><h2 className='text-primary-600'>{userCity}</h2>
+        </div>
         {filteredPosts.length > 0 ? (
           <Posts posts={filteredPosts} onJoinPost={onJoinPost} joinedPosts={joinedPosts} />
         ) : (

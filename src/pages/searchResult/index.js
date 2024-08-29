@@ -82,7 +82,7 @@ const SearchResult = () => {
     <div className="max-w-7xl mx-auto mt-8">
       <h1 className="text-2xl font-bold mb-4">Search Results for: &quot;{searchQuery}&quot;</h1>
       {results.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5 px-10 justify-items-center items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-5 px-10 justify-items-center items-center">
           {results.map((item, index) => (
             <div key={index} className="m-2">
               <PostItem 
