@@ -144,7 +144,12 @@ function CreateReview() {
         >
           Submit Review
         </button>
-
+        <button
+          type="cancel"
+          className="w-full items-center px-3 py-2 text-sm font-medium text-center text-primary-500 border border-primary-500 rounded-lg focus:ring-4 focus:outline-none hover:bg-primary-100 focus:ring-primary-200"
+          onClick={() => router.push('/profile')}>
+          Cancel Writing
+        </button>
       </form>
     </div>
   );
