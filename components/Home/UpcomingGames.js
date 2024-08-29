@@ -5,7 +5,7 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from 'firebase/firestore';
 import { useSession } from 'next-auth/react';
 
-function UpcomingGames({ post, isJoined, onReadMore }) {
+function UpcomingGames({ post, isJoined, onReadMore, setPosts, setJoinedPosts }) { // Ensure setPosts and setJoinedPosts are passed as props
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 180 });
   const { data: session } = useSession();
   const db = getFirestore();
@@ -44,22 +44,27 @@ function UpcomingGames({ post, isJoined, onReadMore }) {
 
   const handleCancel = async () => {
     if (isJoined) {
+      console.log("Cancel button clicked");  // Log when the button is clicked
       try {
         const joinedPostDocRef = doc(db, "joinedPosts", `${post.id}-${session.user.email}`);
         await deleteDoc(joinedPostDocRef);
+        console.log("Document deleted from joinedPosts");  // Log success of deletion
 
         // Increase the PlayersNeeded count by 1
         const postRef = doc(db, "post", post.id);
         await updateDoc(postRef, {
           PlayersNeeded: post.PlayersNeeded + 1,
         });
+        console.log("PlayersNeeded updated in post");  // Log success of update
 
-        // Optionally, you might want to update the local state to reflect the change
+        // Update the local state to reflect the change
         setPosts(prevPosts => prevPosts.map(p => p.id === post.id ? { ...p, PlayersNeeded: p.PlayersNeeded + 1 } : p));
         setJoinedPosts(prevJoinedPosts => prevJoinedPosts.filter(postId => postId !== post.id));
       } catch (error) {
-        console.error("Error canceling join:", error);
+        console.error("Error canceling join:", error);  // Log any errors
       }
+    } else {
+      console.log("isJoined is false, cancel not performed");  // Log if cancel is not executed
     }
   };
 
@@ -107,7 +112,7 @@ function UpcomingGames({ post, isJoined, onReadMore }) {
         <div className="flex justify-between mt-4">
           <button
             onClick={handleCancel}
-            className={`inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-500 hover:bg-red-600`}
+            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-500 hover:bg-red-600"
           >
             Cancel
           </button>
