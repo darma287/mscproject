@@ -79,7 +79,7 @@ function CreateReview() {
       await setDoc(doc(db, "Review", Date.now().toString()), reviewData);
       setReviewText("");
       setFile(null);
-      router.push('/thankyou'); 
+      router.push('/'); 
     } catch (error) {
       console.error("Error writing document: ", error);
     }

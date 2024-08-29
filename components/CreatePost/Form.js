@@ -48,7 +48,6 @@ function Form() {
     const storageRef = ref(storage, `sportapp/${file.name}`);
 
     try {
-      const snapshot = await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       updatedInputs.image = url;
 

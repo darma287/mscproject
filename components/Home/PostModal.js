@@ -89,7 +89,7 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
                                 <div className="flex items-center text-accent gap-2 mb-2">
                                     <HiOutlineMapPin className="text-[20px]" />
                                     {post.Location || 'No Location'} <div></div>
-                                    {post.PostCode || 'No Postcode'}
+                                    {post.PostCode || ' '}
                                 </div>
                                 {hasDescription ? (
                                     <p className="mb-3 font-normal text-gray-700">{post.Description}</p>
