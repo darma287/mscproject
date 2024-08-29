@@ -47,7 +47,6 @@ function Profile() {
       const upcoming = [];
   
       posts.forEach(post => {
-        // Convert Firestore Timestamp to JavaScript Date object
         const postDate = post.Date.toDate();
         if (postDate < today) {
           past.push(post);

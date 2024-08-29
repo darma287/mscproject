@@ -11,7 +11,6 @@ function Review() {
   const [file, setFile] = useState(null);
 
   const handleFileChange = (e) => {
-    // Set file state when a file is selected
     setFile(e.target.files[0]);
   };
 
@@ -45,9 +44,7 @@ function Review() {
     }
 
     try {
-      // Write the review to the 'Review' collection in Firestore
       await setDoc(doc(db, "Review", Date.now().toString()), reviewData);
-      // Optionally, you can reset the form here after successful submission
       setReviewText("");
       setFile(null);
     } catch (error) {
@@ -58,7 +55,6 @@ function Review() {
   return (
     <div className="max-w-lg mx-auto p-6 bg-background rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Review Input Section */}
         <section>
           <h2 className="text-3xl font-semibold text-primary-700 mb-4">Submit Your Review</h2>
           <div className="mb-4">
@@ -75,7 +71,6 @@ function Review() {
           </div>
         </section>
 
-        {/* Image Upload Section */}
         <section>
           <h2 className="text-lg font-semibold text-primary-700 mb-4">Upload an Image (Optional)</h2>
           <div className="mb-4">
@@ -90,7 +85,6 @@ function Review() {
           </div>
         </section>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="bg-primary-500 w-full p-2 rounded-md text-white"

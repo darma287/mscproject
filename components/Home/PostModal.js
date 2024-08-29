@@ -51,7 +51,6 @@ const PostModal = forwardRef(({ post, onClose }, ref) => {
         return date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
-    // Helper to generate Google Maps URL
     const generateGoogleMapsUrl = (location) => {
         const query = encodeURIComponent(location);
         return `https://www.google.com/maps/embed/v1/place?key=AIzaSyCOeAyDR1G61zzk6LpzDU0d_ZLaQDK3b8M&q=${query}`;

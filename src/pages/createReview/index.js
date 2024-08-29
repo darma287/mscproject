@@ -11,20 +11,19 @@ function CreateReview() {
   const { postId, title, date, location, price, playersNeeded, image } = router.query;
   const [reviewText, setReviewText] = useState("");
   const [file, setFile] = useState(null);
-  const { data: session } = useSession(); // Get session data from NextAuth
+  const { data: session } = useSession(); 
   const db = getFirestore(app);
   const [formattedDate, setFormattedDate] = useState('');
-  const [organizer, setOrganizer] = useState(''); // State for the organizer's email
+  const [organizer, setOrganizer] = useState(''); 
 
   useEffect(() => {
     if (date) {
-      const postDate = new Date(parseInt(date)); // Convert milliseconds back to Date
+      const postDate = new Date(parseInt(date)); 
       setFormattedDate(postDate.toLocaleDateString() + ' ' + postDate.toLocaleTimeString());
     }
   }, [date]);
 
   useEffect(() => {
-    // Fetch the post document to get the Organizer email
     const fetchPostData = async () => {
       if (postId) {
         const postDocRef = doc(db, 'joinedPosts', postId);
@@ -42,7 +41,6 @@ function CreateReview() {
   }, [db, postId]);
 
   const handleFileChange = (e) => {
-    // Set file state when a file is selected
     setFile(e.target.files[0]);
   };
 
@@ -60,12 +58,12 @@ function CreateReview() {
       userName: session?.user?.name,
       userEmail: session?.user?.email,
       userImage: session?.user?.image,
-      postId: postId,  // Include the postId to reference the original post
-      organizer: organizer,  // Include the Organizer email
+      postId: postId,  
+      organizer: organizer,  
     };
 
     if (file) {
-      const storage = getStorage(app); // Initialize storage with the Firebase app
+      const storage = getStorage(app); 
       const storageRef = ref(storage, `reviews/${file.name}`);
 
       try {
@@ -78,12 +76,10 @@ function CreateReview() {
     }
 
     try {
-      // Write the review to the 'Review' collection in Firestore
       await setDoc(doc(db, "Review", Date.now().toString()), reviewData);
-      // Optionally, you can reset the form here after successful submission
       setReviewText("");
       setFile(null);
-      router.push('/thankyou'); // Redirect after successful submission, if desired
+      router.push('/thankyou'); 
     } catch (error) {
       console.error("Error writing document: ", error);
     }
@@ -93,7 +89,6 @@ function CreateReview() {
     <div className="max-w-lg mx-auto p-6 bg-background rounded-lg shadow-md">
       <h2 className="text-3xl font-semibold text-primary-700 mb-4">Review the Post</h2>
       
-      {/* Post Details */}
       <div className="mb-6">
         {image && (
           <Image 
@@ -112,9 +107,7 @@ function CreateReview() {
         <p className="text-md text-gray-700">Organizer: {organizer}</p> 
       </div>
 
-      {/* Review form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Review Input Section */}
         <section>
           <h2 className="text-3xl font-semibold text-primary-700 mb-4">Submit Your Review</h2>
           <div className="mb-4">
@@ -131,7 +124,6 @@ function CreateReview() {
           </div>
         </section>
 
-        {/* Image Upload Section */}
         <section>
           <h2 className="text-lg font-semibold text-primary-700 mb-4">Upload an Image (Optional)</h2>
           <div className="mb-4">
@@ -146,7 +138,6 @@ function CreateReview() {
           </div>
         </section>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="bg-primary-500 w-full p-2 rounded-md text-white"

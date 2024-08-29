@@ -8,15 +8,14 @@ function CreatePost() {
     const router = useRouter();
     
     useEffect(() => {
-        if (status === "loading") return; // Do nothing while loading
+        if (status === "loading") return; 
         if (!session) {
             router.push('/')
-            // for now redirect to homescreen, later should redirect to sign in page
         }
     }, [session, status, router]);
 
     if (status === "loading") {
-        return <p>Loading...</p>; // You can replace this with a loading spinner
+        return <p>Loading...</p>; 
     }
 
     return (

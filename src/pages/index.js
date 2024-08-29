@@ -19,7 +19,6 @@ export default function Home() {
   const { data: session } = useSession();
   const db = getFirestore(app);
 
-  // Function to get the user's city using an IP geolocation API
   const getUserCity = async () => {
     try {
       const response = await axios.get('https://ipapi.co/json/');
@@ -34,7 +33,7 @@ export default function Home() {
     const postsArray = [];
     querySnapshot.forEach((doc) => {
       let data = doc.data();
-      data.id = doc.id; // Include the id in the post data
+      data.id = doc.id; 
       postsArray.push(data);
     });
     setPosts(postsArray);
@@ -71,13 +70,11 @@ export default function Home() {
       const joinedPost = { ...post, userEmail: session.user.email, postId: post.id }; 
       await setDoc(doc(db, "joinedPosts", `${post.id}-${session.user.email}`), joinedPost); 
 
-      // Decrease the PlayersNeeded count by 1
       const postRef = doc(db, "post", post.id);
       await updateDoc(postRef, {
         PlayersNeeded: post.PlayersNeeded - 1
       });
 
-      // Update the local state to reflect the change in PlayersNeeded and joined status
       setPosts(prevPosts => prevPosts.map(p => p.id === post.id ? { ...p, PlayersNeeded: p.PlayersNeeded - 1 } : p));
       setJoinedPosts([...joinedPosts, post.id]);
     }

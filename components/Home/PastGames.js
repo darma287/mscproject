@@ -11,7 +11,7 @@ function PastGames({ post, isJoined, onPostDelete }) {
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 180 });
   const [selectedPost, setSelectedPost] = useState(null);
   const modalRef = useRef(null);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter(); 
 
   useEffect(() => {
     if (post.image) {

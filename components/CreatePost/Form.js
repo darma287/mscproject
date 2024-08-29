@@ -17,7 +17,6 @@ function Form() {
 
   useEffect(() => {
     if (status === "authenticated" && session) {
-      // Set user details in state when authenticated
       setInputs((values) => ({ ...values, userName: session.user.name, userImage: session.user.image, email: session.user.email }));
     }
   }, [session, status]);
@@ -25,12 +24,10 @@ function Form() {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    // Update state for input changes
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
   const handleFileChange = (e) => {
-    // Set file state when a file is selected
     setFile(e.target.files[0]);
   };
 
@@ -45,7 +42,6 @@ function Form() {
     const eventDate = new Date(inputs["Date"]);
     const timestamp = Timestamp.fromDate(eventDate);
 
-    // Include location name and date as a timestamp in updatedInputs
     const updatedInputs = { ...inputs, "Date": timestamp, "Location": location ? location.name : '' };
 
     const storage = getStorage();
@@ -56,7 +52,6 @@ function Form() {
       const url = await getDownloadURL(storageRef);
       updatedInputs.image = url;
 
-      // Write updatedInputs to Firestore
       await setDoc(doc(db, "post", Date.now().toString()), updatedInputs);
     } catch (error) {
       console.error("Error writing document: ", error);
@@ -66,7 +61,6 @@ function Form() {
   return (
     <div className="max-w-lg mx-auto p-6 bg-background rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Game Details Section */}
         <section>
           <h2 className="text-3xl font-semibold text-primary-700 mb-4">Game Details</h2>
           <h4 className="text-lg text-forGrey-800 mb-4">Write the details of your Game</h4>
@@ -156,7 +150,6 @@ function Form() {
               required
               className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
             >
-              {/* Added value attribute to ensure selected sport is correctly set */}
               <option value="" disabled selected>Select Sport</option>
               {Data.SportList.map((item) => (
                 <option key={item.id} value={item.name}>{item.name}</option>
@@ -165,7 +158,6 @@ function Form() {
           </div>
         </section>
 
-        {/* Location Selection Section */}
         <section>
           <h2 className="text-lg font-semibold text-primary-700 mb-4">Select Game Location</h2>
           <div className="mb-4">
@@ -179,7 +171,6 @@ function Form() {
           )}
         </section>
 
-        {/* Image Upload Section */}
         <section>
           <h2 className="text-lg font-semibold text-primary-700 mb-4">Game Image</h2>
           <div className="mb-4">
@@ -194,7 +185,6 @@ function Form() {
           </div>
         </section>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="bg-primary-500 w-full p-2 rounded-md text-white"

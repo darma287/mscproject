@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-lea
 import axios from 'axios';
 import L from 'leaflet'
 
-// Fix for default icon issue with Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
