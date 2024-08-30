@@ -12,6 +12,14 @@ h1{
     line-height: 90px;
 }
 
+h2{
+    font-family: "Nunito Sans";
+font-size: 32px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
 p{
     color: #6E7491;
     font-family: "Nunito Sans";

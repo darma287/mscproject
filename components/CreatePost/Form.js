@@ -17,9 +17,7 @@ function Form() {
 
   useEffect(() => {
     if (status === "authenticated" && session) {
-      setInputs((values) => ({ ...values, userName: session.user.name }));
-      setInputs((values) => ({ ...values, userImage: session.user.image }));
-      setInputs((values) => ({ ...values, email: session.user.email }));
+      setInputs((values) => ({ ...values, userName: session.user.name, userImage: session.user.image, email: session.user.email }));
     }
   }, [session, status]);
 
@@ -44,13 +42,12 @@ function Form() {
     const eventDate = new Date(inputs["Date"]);
     const timestamp = Timestamp.fromDate(eventDate);
 
-    const updatedInputs = { ...inputs, "Date": timestamp, "Location": location.name };
+    const updatedInputs = { ...inputs, "Date": timestamp, "Location": location ? location.name : '' };
 
     const storage = getStorage();
     const storageRef = ref(storage, `sportapp/${file.name}`);
 
     try {
-      const snapshot = await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       updatedInputs.image = url;
 
@@ -63,7 +60,6 @@ function Form() {
   return (
     <div className="max-w-lg mx-auto p-6 bg-background rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Game Details Section */}
         <section>
           <h2 className="text-3xl font-semibold text-primary-700 mb-4">Game Details</h2>
           <h4 className="text-lg text-forGrey-800 mb-4">Write the details of your Game</h4>
@@ -132,12 +128,12 @@ function Form() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="postCode" className="block text-primary-700 mb-1">Post Code</label>
+            <label htmlFor="city" className="block text-primary-700 mb-1">City</label>
             <input
               type="text"
-              id="postCode"
-              name="PostCode"
-              placeholder="e.g., 12345"
+              id="city"
+              name="City"
+              placeholder="e.g., New York"
               required
               onChange={handleChange}
               className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
@@ -153,17 +149,14 @@ function Form() {
               required
               className="w-full border-[1px] p-2 rounded-md hover:border-primary-100"
             >
-              <option disabled defaultValue>
-                Select Sport
-              </option>
+              <option value="" disabled selected>Select Sport</option>
               {Data.SportList.map((item) => (
-                <option key={item.id}>{item.name}</option>
+                <option key={item.id} value={item.name}>{item.name}</option>
               ))}
             </select>
           </div>
         </section>
 
-        {/* Location Selection Section */}
         <section>
           <h2 className="text-lg font-semibold text-primary-700 mb-4">Select Game Location</h2>
           <div className="mb-4">
@@ -177,7 +170,6 @@ function Form() {
           )}
         </section>
 
-        {/* Image Upload Section */}
         <section>
           <h2 className="text-lg font-semibold text-primary-700 mb-4">Game Image</h2>
           <div className="mb-4">
@@ -192,7 +184,6 @@ function Form() {
           </div>
         </section>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="bg-primary-500 w-full p-2 rounded-md text-white"

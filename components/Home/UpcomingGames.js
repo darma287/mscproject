@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { HiOutlineCalendar, HiOutlineMapPin, HiOutlineCube } from 'react-icons/hi2';
+import { HiOutlineCalendar, HiOutlineMapPin } from 'react-icons/hi2';
 import Image from 'next/image';
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { getFirestore } from 'firebase/firestore';
+import { useSession } from 'next-auth/react';
 
-function PostItem({ post, onJoin, isJoined, onReadMore }) {
-  console.log("PostItem onJoin:", onJoin);
-
+function UpcomingGames({ post, isJoined, onReadMore, setPosts, setJoinedPosts }) { 
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 180 });
+  const { data: session } = useSession();
+  const db = getFirestore();
 
   useEffect(() => {
     if (post.image) {
@@ -39,6 +42,30 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
     return date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const handleCancel = async () => {
+    if (isJoined) {
+      console.log("Cancel button clicked");  
+      try {
+        const joinedPostDocRef = doc(db, "joinedPosts", `${post.id}-${session.user.email}`);
+        await deleteDoc(joinedPostDocRef);
+        console.log("Document deleted from joinedPosts");  
+
+        const postRef = doc(db, "post", post.id);
+        await updateDoc(postRef, {
+          PlayersNeeded: post.PlayersNeeded + 1,
+        });
+        console.log("PlayersNeeded updated in post");  
+
+        setPosts(prevPosts => prevPosts.map(p => p.id === post.id ? { ...p, PlayersNeeded: p.PlayersNeeded + 1 } : p));
+        setJoinedPosts(prevJoinedPosts => prevJoinedPosts.filter(postId => postId !== post.id));
+      } catch (error) {
+        console.error("Error canceling join:", error);  
+      }
+    } else {
+      console.log("isJoined is false, cancel not performed"); 
+    }
+  };
+
   return (
     <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
       {post.image && imageDimensions.width > 0 && imageDimensions.height > 0 ? (
@@ -60,17 +87,13 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-primary">No Title</h5>
           )}
           <div className="flex items-center text-accent gap-2 mb-2">
-          <HiOutlineCube className="text-[20px]" />
-            {post.Sport || 'Type of sport undefine'}
-          </div>
-          <div className="flex items-center text-accent gap-2 mb-2">
             <HiOutlineCalendar className="text-[20px]" />
             {formatDate(post.Date)}
           </div>
           <div className="flex items-center text-accent gap-2 mb-2">
             <HiOutlineMapPin className="text-[20px]" />
             {truncateText(post.Location || 'No Location', 20)} <div></div>
-            {post.City || 'No City'}
+            {post.PostCode || 'No Postcode'}
           </div>
           {hasDescription ? (
             <p className="mb-3 font-normal text-gray-700">{truncateText(post.Description || 'No Description', 30)}</p>
@@ -86,18 +109,10 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
         </div>
         <div className="flex justify-between mt-4">
           <button
-            onClick={() => onJoin(post)}
-            disabled={post.PlayersNeeded <= 0 || isJoined}
-            className={`inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none ${
-              post.PlayersNeeded <= 0 || isJoined ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-500 hover:bg-primary-600 focus:ring-primary-300'
-            }`}
+            onClick={handleCancel}
+            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-500 hover:bg-red-600"
           >
-            {post.PlayersNeeded <= 0 ? 'Game is full' : isJoined ? 'Joined' : 'Join'}
-            {!isJoined && post.PlayersNeeded > 0 && (
-              <svg className="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-              </svg>
-            )}
+            Cancel
           </button>
           <button
             onClick={() => onReadMore(post)}
@@ -111,7 +126,4 @@ function PostItem({ post, onJoin, isJoined, onReadMore }) {
   );
 }
 
-export default PostItem;
-
-//bug to fix:
-//fix the height of the cards/posts
+export default UpcomingGames;

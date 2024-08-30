@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     --body-large-font-family: "Nunito Sans", Helvetica;
     --body-large-font-size: 18px;

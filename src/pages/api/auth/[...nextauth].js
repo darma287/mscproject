@@ -9,7 +9,7 @@ export const authOptions = {
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  debug: true // Enable debug messages in the console
+  debug: true 
 }
 
 export default NextAuth(authOptions)

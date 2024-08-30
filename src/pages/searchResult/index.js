@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import app from '../../../shared/FirebaseConfig';
 import PostItem from '../../../components/Home/PostItem';
 import PostModal from '../../../components/Home/PostModal';
+import Search from '../../../components/Home/Search';
 
 const SearchResult = () => {
   const router = useRouter();
@@ -80,21 +81,33 @@ const SearchResult = () => {
   return (
     <div className="max-w-7xl mx-auto mt-8">
       <h1 className="text-2xl font-bold mb-4">Search Results for: &quot;{searchQuery}&quot;</h1>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5 px-10">
-        {results.map((item, index) => (
-          <div key={index} className="m-2">
-            <PostItem 
-              post={item} 
-              onJoin={() => onJoinPost(item)} 
-              isJoined={joinedPosts.includes(item.id)} 
-              onReadMore={() => handleReadMore(item)} 
-            />
-          </div>
-        ))}
-      </div>
+      {results.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-5 px-10 justify-items-center items-center">
+          {results.map((item, index) => (
+            <div key={index} className="m-2">
+              <PostItem 
+                post={item} 
+                onJoin={() => onJoinPost(item)} 
+                isJoined={joinedPosts.includes(item.id)} 
+                onReadMore={() => handleReadMore(item)} 
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className='flex flex-col items-center justify-center mt-4 mb-4 w-full h-full'>
+          <h3 className='mt-8 mb-8'>Nothing available</h3>
+          <p className='mt-8 mb-2'>You might want to refine your search</p>
+          <div className='w-full mb-80'><Search /></div>
+        </div>
+      )}
       <PostModal ref={modalRef} post={selectedPost} onClose={handleCloseModal} />
     </div>
   );
+  
 };
 
 export default SearchResult;
+
+
+//Bug:
